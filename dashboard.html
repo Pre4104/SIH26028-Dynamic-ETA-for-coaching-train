@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | RailWise</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Our CSS -->
+    <link rel="stylesheet" href="css/style.css?v=15">
+
+    <link rel="stylesheet" href="css/railway-motion.css?v=7">
+    <script src="js/auth.js" data-guard="passenger"></script>
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-lg navbar-dark railwise-navbar sticky-top">
+
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" href="index.html">
+
+            <span class="railwise-mark" aria-hidden="true"><span class="railwise-side-smoke"><i></i><i></i><i></i></span><span class="railwise-side-engine"><i class="side-chimney"></i><i class="side-cab"><b></b></i><i class="side-boiler"></i><i class="side-headlamp"></i><i class="side-cowcatcher"></i><i class="side-wheel wheel-a"></i><i class="side-wheel wheel-b"></i><i class="side-wheel wheel-c"></i><i class="side-rod"></i></span><i class="railwise-side-track"></i></span>
+
+            RailWise
+
+        </a>
+
+<button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#railwiseNavbar"
+    aria-controls="railwiseNavbar"
+    aria-expanded="false"
+    aria-label="Toggle navigation">
+
+    <span class="navbar-toggler-icon"></span>
+
+</button>
+
+<div class="collapse navbar-collapse" id="railwiseNavbar">
+<div class="navbar-nav ms-auto">
+
+    <a class="nav-link" href="index.html">
+        <i class="bi bi-house"></i>
+        Home
+    </a>
+
+    <a class="nav-link active" href="dashboard.html">
+        <i class="bi bi-speedometer2"></i>
+        Dashboard
+    </a>
+
+    <a class="nav-link" href="train-details.html">
+        <i class="bi bi-train-front"></i>
+        Trains
+    </a>
+
+    <a class="nav-link" href="map.html">
+        <i class="bi bi-geo-alt"></i>
+        Live Map
+    </a>
+
+    <a class="nav-link" href="analytics.html">
+        <i class="bi bi-bar-chart"></i>
+        Analytics
+    </a>
+
+</div>
+
+    </div>
+</div>
+</nav>
+
+
+
+<!-- DASHBOARD HEADER -->
+
+<section class="dashboard-header">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-md-8">
+
+                <h2 class="fw-bold">
+                    Train Monitoring Dashboard
+                </h2>
+
+                <p class="text-muted mb-0">
+
+                    Monitor train movement and
+                    dynamically predicted arrival times.
+
+                </p>
+
+            </div>
+
+
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+
+                <span class="system-status">
+
+                    <span class="status-dot"></span>
+
+                    System Online
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- SEARCH -->
+
+<div class="row g-2 align-items-center mb-4">
+
+    <div class="col-md-6">
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="bi bi-search"></i>
+            </span>
+
+            <input
+                type="text"
+                id="dashboardSearch"
+                class="form-control"
+                placeholder="Search by train number or name..."
+            >
+        </div>
+    </div>
+
+    <div class="col-md-6">
+
+       <div class="btn-group w-100" role="group">
+
+    <button
+        type="button"
+        class="btn btn-primary status-filter active"
+        data-status="all">
+        All
+    </button>
+
+    <button
+        type="button"
+        class="btn btn-outline-success status-filter"
+        data-status="on-time">
+        On Time
+    </button>
+
+    <button
+        type="button"
+        class="btn btn-outline-primary status-filter"
+        data-status="running">
+        Running
+    </button>
+
+    <button
+        type="button"
+        class="btn btn-outline-danger status-filter"
+        data-status="delayed">
+        Delayed
+    </button>
+
+    <button
+        type="button"
+        class="btn btn-outline-dark status-filter"
+        data-status="arrived">
+        Arrived
+    </button>
+
+</div>
+
+    </div>
+
+</div>
+
+<div class="mb-3">
+    <small class="text-muted">
+        Showing <span id="trainCount">0</span> trains
+    </small>
+</div>
+
+
+
+<!-- STATISTICS -->
+
+<section class="container mt-4">
+
+    <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-lg-5">
+
+
+        <!-- ACTIVE -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stat-card"  id="activeTrainsCard">
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-train-front"></i>
+
+                </div>
+
+                <div>
+
+                    <p>Active Trains</p>
+
+                    <h3>
+                        <span id="activeTrains">0</span>
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ON TIME -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stat-card" id="onTimeTrainsCard">
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-check-circle"></i>
+
+                </div>
+
+                <div>
+
+                    <p>On Time</p>
+
+                    <h3>
+                      <span id="onTimeTrains">0</span>
+                    </h3>
+                </div>
+
+            </div>
+
+        </div>
+    
+        
+        <!-- RUNNING -->
+
+<div class="col">
+
+    <div class="stat-card" id="runningTrainsCard">
+
+        <div class="stat-icon">
+            <i class="bi bi-train-front-fill"></i>
+        </div>
+
+        <div>
+            <p>Running Trains</p>
+
+            <h3>
+                <span id="runningTrains">0</span>
+            </h3>
+        </div>
+
+    </div>
+
+</div>
+
+        <!-- DELAYED -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stat-card" id="delayedTrainsCard">
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-clock-history"></i>
+
+                </div>
+
+                <div>
+
+                    <p>Delayed</p>
+
+                    <h3>
+                      <span id="delayedTrains">0</span>
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- AVG DELAY -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-graph-up-arrow"></i>
+
+                </div>
+
+                <div>
+
+                    <p>Average Delay</p>
+
+                    <h3>
+                      <span id="averageDelay">0</span> min
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- TRAIN TABLE -->
+
+<section class="container mt-5 mb-5">
+
+    <div class="section-title">
+
+       <div class="d-flex justify-content-between align-items-center mb-3">
+
+    <h4 class="mb-0">
+        Live Train Status
+    </h4>
+
+    <button
+        id="refreshDashboard"
+        class="btn btn-outline-primary btn-sm">
+
+        <i class="bi bi-arrow-clockwise"></i>
+        Refresh
+
+    </button>
+
+    </div>
+
+        <p class="text-muted">
+            Current train position and predicted arrival
+        </p>
+
+    </div>
+
+
+
+    <div class="table-responsive train-table">
+
+        <table class="table align-middle">
+
+            <thead>
+
+                <tr>
+
+                    <th>Train</th>
+
+                    <th>Current Location</th>
+
+                    <th>Next Station</th>
+
+                    <th>Scheduled ETA</th>
+
+                    <th>Predicted ETA</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="trainTableBody">
+              <tr id="dashboardLoading">
+                <td colspan="6" class="text-center py-4">
+                  <div class="spinner-border text-primary"
+                      role="status">
+                  </div>
+
+                  <div class="mt-2 text-muted">
+                     Loading train information...
+                  </div>
+                </td>
+              </tr>
+
+              <tr id="dashboardEmpty" style="display: none;">
+                 <td colspan="6" class="text-center py-4">
+                    <i class="bi bi-train-front fs-1 text-muted"></i>
+                    <p class="mt-2 mb-0 text-muted">
+                         No train information available.
+                    </p>
+                 </td>
+              </tr>
+
+     <tr id="dashboardError" style="display: none;">
+          <td colspan="6" class="text-center py-4">
+
+             <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
+
+             <h5 class="mt-3">
+                 Unable to load train information
+             </h5>
+
+             <p class="text-muted mb-0">
+                 Please try again later.
+             </p>
+
+           </td>
+     </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- RailWise Chatbot -->
+
+<button
+    id="chatbotToggle"
+    class="chatbot-toggle"
+    type="button"
+    aria-label="Open Saarthi"
+    title="Talk to Saarthi"
+    onclick="window.location.href='chatbot.html'">
+    <span class="rail-bot" aria-hidden="true">
+        <span class="rail-bot-smoke"><i></i><i></i><i></i></span>
+        <span class="rail-bot-engine">
+            <i class="engine-chimney"></i><i class="engine-cab"></i>
+            <i class="engine-boiler"></i><i class="engine-lamp"></i>
+            <i class="engine-cowcatcher"></i><i class="engine-wheel wheel-a"></i>
+            <i class="engine-wheel wheel-b"></i><i class="engine-rod"></i>
+        </span>
+        <span class="rail-bot-track"></span>
+    </span>
+    <span class="rail-bot-label" aria-hidden="true">I am Saarthi, your AI assistant</span>
+</button>
+
+
+
+<script src="js/train-data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
+

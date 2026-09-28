@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Saarthi | RailWise</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- RailWise CSS -->
+    <link rel="stylesheet"
+          href="css/style.css?v=15">
+
+    <style>
+
+        /* =====================================
+           SAARTHI CHATBOT PAGE
+           ===================================== */
+
+        body {
+            background: #f5f7fa;
+        }
+
+        .saarthi-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* =====================================
+           CHATBOT HEADER
+           ===================================== */
+
+        .saarthi-header {
+            background: #12344d;
+            color: #ffffff;
+            padding: 14px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #f2b632;
+        }
+
+        .saarthi-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .saarthi-brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #f2b632;
+            color: #12344d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .saarthi-brand h5 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .saarthi-brand small {
+            color: #d9e2e8;
+        }
+
+
+        /* =====================================
+           HEADER BUTTONS
+           ===================================== */
+
+        .saarthi-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .saarthi-control-btn {
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(255,255,255,.25);
+            background: transparent;
+            color: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .saarthi-control-btn:hover {
+            background: rgba(242,182,50,.18);
+            color: #f2b632;
+        }
+
+
+        /* =====================================
+           CHAT AREA
+           ===================================== */
+
+        .saarthi-container {
+            width: min(100%, 1100px);
+            margin: auto;
+            padding: 24px;
+            flex: 1;
+            display: flex;
+        }
+
+        .saarthi-chat {
+            width: 100%;
+            min-height: 650px;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(0,0,0,.12);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #dce3e8;
+        }
+
+
+        /* =====================================
+           MESSAGES
+           ===================================== */
+
+        .saarthi-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: #f8fafc;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 11px 15px;
+            margin-bottom: 12px;
+            border-radius: 14px;
+            line-height: 1.5;
+        }
+
+        .bot-message {
+            background: #e8eef3;
+            color: #18384d;
+            border-left: 4px solid #f2b632;
+        }
+
+        .user-message {
+            margin-left: auto;
+            background: #12344d;
+            color: #ffffff;
+        }
+
+
+        /* =====================================
+           TRAIN SELECTOR
+           ===================================== */
+
+        .saarthi-selector {
+            padding: 16px 24px;
+            background: #ffffff;
+            border-top: 1px solid #e1e6ea;
+        }
+
+        .saarthi-selector label {
+            font-weight: 600;
+            color: #18384d;
+            margin-bottom: 6px;
+        }
+
+
+        /* =====================================
+           QUICK ACTIONS
+           ===================================== */
+
+        .saarthi-quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .saarthi-quick-actions button {
+            border: 1px solid #d6a52c;
+            background: #fff8df;
+            color: #18384d;
+            border-radius: 20px;
+            padding: 7px 13px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .saarthi-quick-actions button:hover {
+            background: #f2b632;
+            color: #12344d;
+        }
+
+
+        /* =====================================
+           INPUT
+           ===================================== */
+
+        .saarthi-input-area {
+            padding: 16px;
+            background: #ffffff;
+            border-top: 1px solid #dce3e8;
+            display: flex;
+            gap: 10px;
+        }
+
+        .saarthi-input-area input {
+            border-radius: 12px;
+            padding: 12px 15px;
+        }
+
+        .saarthi-send {
+            width: 50px;
+            border: none;
+            border-radius: 12px;
+            background: #f2b632;
+            color: #12344d;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .saarthi-send:hover {
+            background: #dca527;
+        }
+
+
+        /* =====================================
+           MAXIMIZED MODE
+           ===================================== */
+
+        body.saarthi-maximized .saarthi-container {
+            width: 100%;
+            padding: 0;
+        }
+
+        body.saarthi-maximized .saarthi-chat {
+            min-height: calc(100vh - 73px);
+            border-radius: 0;
+            border: none;
+        }
+
+
+        /* =====================================
+           MINIMIZED MODE
+           ===================================== */
+
+        body.saarthi-minimized .saarthi-container {
+            display: none;
+        }
+
+        body.saarthi-minimized .saarthi-header {
+            border-bottom: 3px solid #f2b632;
+        }
+
+
+        /* =====================================
+           MOBILE
+           ===================================== */
+
+        @media (max-width: 768px) {
+
+            .saarthi-container {
+                padding: 10px;
+            }
+
+            .saarthi-chat {
+                min-height: calc(100vh - 95px);
+                border-radius: 12px;
+            }
+
+            .saarthi-header {
+                padding: 12px 14px;
+            }
+
+            .saarthi-brand-icon {
+                width: 38px;
+                height: 38px;
+            }
+
+            .chat-message {
+                max-width: 90%;
+            }
+
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="css/railway-motion.css?v=7">
+    <script src="js/auth.js" data-guard="passenger"></script>
+</head>
+
+
+<body>
+
+<div class="saarthi-page">
+
+
+    <!-- =====================================
+         SAARTHI HEADER
+         ===================================== -->
+
+    <header class="saarthi-header">
+
+        <div class="saarthi-brand">
+
+            <div class="saarthi-brand-icon">
+
+                <i class="bi bi-train-front-fill"></i>
+
+            </div>
+
+            <div>
+
+                <h5>Saarthi</h5>
+
+                <small>
+                    RailWise AI Travel Assistant
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="saarthi-controls">
+
+            <!-- Minimize -->
+            <button
+                id="saarthiMinimize"
+                class="saarthi-control-btn"
+                title="Minimize">
+
+                <i class="bi bi-dash-lg"></i>
+
+            </button>
+
+
+            <!-- Maximize -->
+            <button
+                id="saarthiMaximize"
+                class="saarthi-control-btn"
+                title="Maximize">
+
+                <i class="bi bi-arrows-fullscreen"></i>
+
+            </button>
+
+
+            <!-- Back -->
+            <button
+                id="saarthiClose"
+                class="saarthi-control-btn"
+                title="Back">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================
+         CHAT
+         ===================================== -->
+
+    <main class="saarthi-container">
+
+        <div class="saarthi-chat">
+
+
+            <!-- Messages -->
+
+            <div
+                id="chatbotMessages"
+                class="saarthi-messages">
+
+                <div class="chat-message bot-message">
+
+                    👋 Hello! I'm Saarthi.
+
+                    <br><br>
+
+                    I'm your RailWise AI travel assistant.
+
+                    <br><br>
+
+                    Ask me about your train's
+                    <strong>location</strong>,
+                    <strong>ETA</strong>,
+                    <strong>delay</strong>,
+                    <strong>status</strong> or
+                    <strong>next station</strong>.
+
+                </div>
+
+
+                <div
+                    id="chatbotTyping"
+                    class="chat-message bot-message"
+                    style="display:none;">
+
+                    Saarthi is typing...
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Train Selector -->
+
+            <div class="saarthi-selector">
+
+                <label for="chatbotTrainSelect">
+
+                    Select Train
+
+                </label>
+
+                <select
+                    id="chatbotTrainSelect"
+                    class="form-select">
+
+                    <option value="12627">
+                        12627 - Karnataka Express
+                    </option>
+
+                    <option value="16515">
+                        16515 - Karwar Express
+                    </option>
+
+                    <option value="12007">
+                        12007 - Shatabdi Express
+                    </option>
+
+                </select>
+
+
+                <!-- Quick actions -->
+
+                <div class="saarthi-quick-actions">
+
+                    <button
+                        class="quick-action"
+                        data-action="location">
+
+                        <i class="bi bi-geo-alt"></i>
+                        Location
+
+                    </button>
+
+                    <button
+                        class="quick-action"
+                        data-action="eta">
+
+                        <i class="bi bi-clock"></i>
+                        ETA
+
+                    </button>
+
+                    <button
+                        class="quick-action"
+                        data-action="delay">
+
+                        <i class="bi bi-exclamation-triangle"></i>
+                        Delay
+
+                    </button>
+
+                    <button
+                        class="quick-action"
+                        data-action="next">
+
+                        <i class="bi bi-signpost"></i>
+                        Next Station
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Input -->
+
+            <div class="saarthi-input-area">
+
+                <input
+                    type="text"
+                    id="chatbotInput"
+                    class="form-control"
+                    placeholder="Ask Saarthi about your train...">
+
+                <button
+                    id="chatbotSend"
+                    class="saarthi-send"
+                    aria-label="Send">
+
+                    <i class="bi bi-send-fill"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================
+     CHATBOT JS
+     ===================================== -->
+
+<script src="js/train-data.js"></script>
+
+<script src="js/api.js"></script>
+
+<script src="js/chatbot.js"></script>
+
+
+<script>
+
+    // =====================================
+    // MINIMIZE
+    // =====================================
+
+   // =====================================
+// MINUS → GO BACK
+// =====================================
+
+const minimizeButton =
+    document.getElementById("saarthiMinimize");
+
+minimizeButton.addEventListener("click", function () {
+
+    window.history.back();
+
+});
+
+
+    // =====================================
+    // MAXIMIZE
+    // =====================================
+
+    const maximizeButton =
+        document.getElementById("saarthiMaximize");
+
+    maximizeButton.addEventListener("click", function () {
+
+        document.body.classList.toggle(
+            "saarthi-maximized"
+        );
+
+        const icon =
+            maximizeButton.querySelector("i");
+
+
+        if (
+            document.body.classList.contains(
+                "saarthi-maximized"
+            )
+        ) {
+
+            icon.className =
+                "bi bi-fullscreen-exit";
+
+            maximizeButton.title =
+                "Restore";
+
+        } else {
+
+            icon.className =
+                "bi bi-arrows-fullscreen";
+
+            maximizeButton.title =
+                "Maximize";
+        }
+
+    });
+
+
+    // =====================================
+    // BACK TO PREVIOUS PAGE
+    // =====================================
+
+    const closeButton =
+        document.getElementById("saarthiClose");
+
+    closeButton.addEventListener(
+        "click",
+        function () {
+
+            if (window.history.length > 1) {
+
+                window.history.back();
+
+            } else {
+
+                window.location.href =
+                    "index.html";
+
+            }
+
+        }
+    );
+
+</script>
+    <script src="js/railway-motion.js?v=7"></script>
+</body>
+
+</html>
+

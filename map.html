@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Live Map | RailWise</title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+
+    <!-- Bootstrap Icons -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <!-- Leaflet CSS -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        crossorigin=""
+    >
+
+
+    <!-- Our CSS -->
+
+    <link rel="stylesheet" href="css/style.css?v=15">
+
+    <link rel="stylesheet" href="css/railway-motion.css?v=7">
+    <script src="js/auth.js" data-guard="passenger"></script>
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-lg navbar-dark railwise-navbar sticky-top">
+    <div class="container">
+
+        <a class="navbar-brand fw-bold"
+           href="index.html">
+
+            <span class="railwise-mark" aria-hidden="true"><span class="railwise-side-smoke"><i></i><i></i><i></i></span><span class="railwise-side-engine"><i class="side-chimney"></i><i class="side-cab"><b></b></i><i class="side-boiler"></i><i class="side-headlamp"></i><i class="side-cowcatcher"></i><i class="side-wheel wheel-a"></i><i class="side-wheel wheel-b"></i><i class="side-wheel wheel-c"></i><i class="side-rod"></i></span><i class="railwise-side-track"></i></span>
+
+            RailWise
+
+        </a>
+
+<button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#railwiseNavbar"
+    aria-controls="railwiseNavbar"
+    aria-expanded="false"
+    aria-label="Toggle navigation">
+
+    <span class="navbar-toggler-icon"></span>
+
+</button>
+     <div class="collapse navbar-collapse" id="railwiseNavbar">
+        <div class="navbar-nav ms-auto">
+
+            <a class="nav-link"
+             href="index.html">
+
+               <i class="bi bi-house"></i>
+                Home
+
+            </a>
+
+
+            <a class="nav-link"
+              href="dashboard.html">
+
+             <i class="bi bi-speedometer2"></i>
+              Dashboard
+
+            </a>
+
+
+            <a class="nav-link active"
+             href="map.html">
+
+             <i class="bi bi-geo-alt"></i>
+              Live Map
+
+            </a>
+
+            <a class="nav-link"
+             href="train-details.html">
+
+             <i class="bi bi-train-front"></i>
+              Trains
+
+            </a>
+
+           <a class="nav-link"
+             href="analytics.html">
+
+            <i class="bi bi-bar-chart"></i>
+             Analytics
+
+           </a>
+
+        </div>
+
+    </div>
+ </div>
+</nav>
+
+
+
+<!-- PAGE HEADER -->
+
+<section class="dashboard-header">
+
+    <div class="container">
+
+        <h2 class="fw-bold">
+
+            <i class="bi bi-geo-alt-fill text-primary"></i>
+
+            Live Train Map
+
+        </h2>
+
+        <p class="text-muted">
+
+            Monitor the current position of trains
+            and their upcoming stations.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- MAP -->
+
+<!-- LIVE MAP -->
+
+<section class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+            <h5 class="fw-bold mb-1">
+                Live Train Location
+            </h5>
+
+            <p class="text-muted mb-0">
+                Real-time train movement monitoring
+            </p>
+        </div>
+
+<div class="d-flex align-items-center gap-3">
+
+    <!-- Train Selector -->
+    <select id="mapTrainSelector" class="form-select">
+
+        <option value="12627">
+            12627 - Karnataka Express
+        </option>
+
+        <option value="16515">
+            16515 - Karwar Express
+        </option>
+
+        <option value="12007">
+            12007 - Shatabdi Express
+        </option>
+
+    </select>
+
+    <!-- Refresh Button -->
+    <button
+        id="refreshMap"
+        class="btn btn-outline-primary">
+
+        <i class="bi bi-arrow-clockwise"></i>
+        Refresh
+
+    </button>
+
+    <div class="live-indicator">
+
+        <span class="live-dot"></span>
+
+        Live Tracking
+
+    </div>
+
+</div>
+
+
+    <div class="map-card">
+
+    <!-- Map Loading State -->
+
+    <div id="mapLoading" class="text-center py-5">
+
+        <div class="spinner-border text-primary"
+             role="status">
+        </div>
+
+        <p class="text-muted mt-2">
+            Loading live train location...
+        </p>
+
+    </div>
+
+    <div id="trainMap"></div>
+
+    </div>
+    <div class="text-end mt-2">
+
+        <small class="text-muted">
+            <i class="bi bi-arrow-repeat"></i>
+            Last updated: <span id="lastUpdated">Just now</span>
+        </small>
+
+    </div>
+
+</section>
+
+
+
+<!-- TRAIN INFORMATION -->
+
+<section class="container mt-4 mb-5">
+
+    <div class="row g-4">
+
+
+        <!-- TRAIN -->
+
+        <div class="col-lg-8">
+
+            <div class="map-info-card">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="large-train-icon">
+
+                        <i class="bi bi-train-front-fill"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h4 class="fw-bold mb-1" id="mapTrainName">
+
+                            12627 Karnataka Express
+
+                        </h4>
+
+                        <p class="text-muted mb-0">
+
+                            Live train tracking
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <hr>
+
+
+                <div class="row">
+
+
+                    <div class="col-md-4">
+
+                        <small class="text-muted">
+
+                            Current Location
+
+                        </small>
+
+                        <h5 class="mt-1" id="mapCurrentLocation">
+
+                            Mandya
+
+                        </h5>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <small class="text-muted" id="mapNextStation">
+
+                            Next Station
+
+                        </small>
+
+                        <h5 class="mt-1">
+
+                            Ramanagaram
+
+                        </h5>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <small class="text-muted">
+
+                            Predicted ETA
+
+                        </small>
+
+                        <h5 class="mt-1 text-primary"  id="mapPredictedETA">
+
+                            09:42 AM
+
+                        </h5>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- LEGEND -->
+
+        <div class="col-lg-4">
+
+            <div class="map-info-card">
+
+                <h5 class="fw-bold">
+
+                    Map Legend
+
+                </h5>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-current"></span>
+
+                    Current Train
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-station"></span>
+
+                    Station
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-route"></span>
+
+                    Train Route
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- Leaflet JS -->
+<script src="js/train-data.js"></script>
+<script src="js/api.js"></script>
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    crossorigin="">
+</script>
+
+
+<!-- Our JS -->
+
+<!-- RailWise Chatbot -->
+
+<button
+    id="chatbotToggle"
+    class="chatbot-toggle"
+    type="button"
+    aria-label="Open Saarthi"
+    title="Talk to Saarthi"
+    onclick="window.location.href='chatbot.html'">
+    <span class="rail-bot" aria-hidden="true">
+        <span class="rail-bot-smoke"><i></i><i></i><i></i></span>
+        <span class="rail-bot-engine">
+            <i class="engine-chimney"></i><i class="engine-cab"></i>
+            <i class="engine-boiler"></i><i class="engine-lamp"></i>
+            <i class="engine-cowcatcher"></i><i class="engine-wheel wheel-a"></i>
+            <i class="engine-wheel wheel-b"></i><i class="engine-rod"></i>
+        </span>
+        <span class="rail-bot-track"></span>
+    </span>
+    <span class="rail-bot-label" aria-hidden="true">I am Saarthi, your AI assistant</span>
+</button>
+
+
+
+<script src="js/train-data.js"></script>
+<script src="js/api.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+<script src="js/map.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+    <script src="js/railway-motion.js?v=7"></script>
+</body>
+
+</html>
+

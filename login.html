@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in – RailWise</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;
+ background:linear-gradient(rgba(10,40,70,.72),rgba(10,40,70,.72)),url(assets/platform-arrival-poster.jpg) center/cover #15658f}
+.box{width:100%;max-width:440px;background:#fff;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.35);overflow:hidden}
+.brand{background:#15658f;color:#fff;padding:20px 24px}.brand h1{font-size:24px;margin:0;font-weight:700}
+.brand p{margin:2px 0 0;opacity:.85;font-size:14px}
+.seg{display:flex}.seg button{flex:1;border:0;padding:14px 8px;background:#eef3f7;font-weight:600;color:#42566a;border-bottom:3px solid transparent}
+.seg button.on{background:#fff;color:#15658f;border-bottom-color:#d4a72c}
+.body{padding:22px 24px}.demo{font-size:13px;background:#f4f7fa;border-radius:8px;padding:10px 12px;color:#42566a}
+.demo code{cursor:pointer}
+</style></head><body>
+<div class="box">
+  <div class="brand"><h1><i class="bi bi-train-front"></i> RailWise</h1><p>Dynamic ETA. Safer journeys.</p></div>
+  <div class="seg">
+    <button id="tabP" class="on" type="button"><i class="bi bi-person"></i> Passenger</button>
+    <button id="tabS" type="button"><i class="bi bi-shield-lock"></i> Staff &amp; Control room</button>
+  </div>
+  <div class="body">
+    <h2 class="h5 mb-1" id="ttl">Passenger sign in</h2>
+    <p class="text-muted small" id="sub">Track your train, get safe-time and connection alerts.</p>
+    <form id="f" novalidate>
+      <div class="mb-3"><label class="form-label" for="em">Email</label><input class="form-control" id="em" type="email" autocomplete="username" required></div>
+      <div class="mb-3"><label class="form-label" for="pw">Password</label><input class="form-control" id="pw" type="password" autocomplete="current-password" required></div>
+      <div class="alert alert-danger py-2 d-none" id="err" role="alert"></div>
+      <button class="btn btn-primary w-100" style="background:#15658f;border-color:#15658f" type="submit">Sign in</button>
+    </form>
+    <button class="btn btn-outline-secondary w-100 mt-2" id="guest" type="button">Continue as guest passenger</button>
+    <div class="demo mt-3" id="demo"></div>
+  </div>
+</div>
+<script src="js/auth.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const P={passenger:{t:"Passenger sign in",s:"Track your train, get safe-time and connection alerts.",d:'Demo: <code data-e="passenger@railwise.in" data-p="pass123">passenger@railwise.in / pass123</code>'},
+staff:{t:"Staff & Control room sign in",s:"Station staff and control room officers only.",d:'Demo staff: <code data-e="staff@railwise.in" data-p="staff123">staff@railwise.in / staff123</code><br>Demo control: <code data-e="control@railwise.in" data-p="control123">control@railwise.in / control123</code>'}};
+let portal="passenger";
+function set(p){portal=p;$("#tabP").className=p=="passenger"?"on":"";$("#tabS").className=p=="staff"?"on":"";
+ $("#ttl").textContent=P[p].t;$("#sub").textContent=P[p].s;$("#demo").innerHTML=P[p].d+'<div class="mt-1">Click a line to autofill. Demo only.</div>';
+ $("#guest").style.display=p=="passenger"?"":"none";$("#err").classList.add("d-none")}
+$("#tabP").onclick=()=>set("passenger");$("#tabS").onclick=()=>set("staff");
+$("#demo").onclick=e=>{const c=e.target.closest("code");if(c){$("#em").value=c.dataset.e;$("#pw").value=c.dataset.p}};
+$("#f").onsubmit=e=>{e.preventDefault();const r=RWAuth.login($("#em").value,$("#pw").value,portal);
+ if(r.ok)location.href=r.home;else{$("#err").textContent=r.msg;$("#err").classList.remove("d-none")}};
+$("#guest").onclick=()=>{location.href=RWAuth.guest()};
+const s=RWAuth.session();if(s&&!new URLSearchParams(location.search).has("switch"))location.replace(RWAuth.HOME[s.role]);
+set(new URLSearchParams(location.search).get("portal")=="staff"?"staff":"passenger");
+</script></body></html>
